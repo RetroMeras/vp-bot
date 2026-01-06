@@ -1,3 +1,4 @@
+from telegram import ReplyKeyboardMarkup
 from loguru import logger
 from services.user import UserService
 from telegram import Update
@@ -13,4 +14,9 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
     await update.message.reply_text(
         f"Добрый день, {update.effective_user.first_name}!",
+        reply_markup=ReplyKeyboardMarkup([
+            ["/buses", "/news"],
+            ["/about", "/settings"],
+        ], resize_keyboard=True),
+        parse_mode="Markdown"
     )

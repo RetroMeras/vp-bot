@@ -42,9 +42,12 @@ class BusStopService(BaseService):
     def get_stop_code(self, stop_code: int) -> BusStop:
         return self.session.exec(select(BusStop).where(BusStop.stop_code == stop_code)).one()
 
+    def get_all(self) -> list[BusStop]:
+        return list(self.session.exec(select(BusStop)).all())
+
     # TODO: possibly optimize
-    def get_closet(self, latitude: float, longitude: float) -> BusStop:
-        stops = self.session.exec(select(BusStop)).all()
+    def get_closest(self, latitude: float, longitude: float) -> BusStop:
+        stops = self.get_all()
         if len(stops) == 0:
             raise ValueError("No bus stops were created.")
         if len(stops) == 1:
@@ -59,4 +62,4 @@ class BusStopService(BaseService):
                 closest = stop
                 shortest_distance = distance
 
-        return stop
+        return closest
