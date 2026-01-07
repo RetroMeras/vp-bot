@@ -120,10 +120,10 @@ async def handle_routes_csv_upload(update: Update, context: ContextTypes.DEFAULT
         count = 0
         for route in reader:
             success, _reason = bus_route_service.add(
-                route_number=route["route_number"],
+                route_number=int(route["route_number"]),
                 name=route["name"],
-                first_stop_code=int(route["first_stop_code"]),
-                last_stop_code=int(route["last_stop_code"]),
+                first_stop_code=route["first_stop_code"],
+                last_stop_code=route["last_stop_code"],
                 is_active=bool(route["is_active"]),
                 color_hex=route["color_hex"],
             )

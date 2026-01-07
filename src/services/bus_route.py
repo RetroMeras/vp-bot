@@ -9,7 +9,7 @@ class BusRouteService(BaseService):
     def __init__(self):
         super().__init__()
 
-    def add(self, route_number: str, name: str, first_stop_code: int, last_stop_code: int, is_active: bool = True, color_hex: str = "#007BFF") -> tuple[bool, str]:
+    def add(self, route_number: int, name: str, first_stop_code: str, last_stop_code: str, is_active: bool = True, color_hex: str = "#007BFF") -> tuple[bool, str]:
         """Add a new bus route"""
         if self.session.exec(select(BusRoute).where(BusRoute.route_number == route_number)).first():
             return False, "Маршрут с таким номером уже существует"

@@ -1,3 +1,4 @@
+from handlers.conversations.buses_utils.handlers.route_handlers import routes_menu
 from handlers.conversations.buses_utils.handlers.stops_handler import stops_menu
 from handlers.conversations.buses_utils.enums import BusesMenuAnswers
 from handlers.conversations.buses_utils.enums import BusesConversationSteps
@@ -33,5 +34,4 @@ async def buses_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await query.edit_message_text(text="Расписание в разработке")
         return ConversationHandler.END
     elif query.data == BusesMenuAnswers.ROUTES:
-        await query.edit_message_text(text="Маршруты в разработке")
-        return ConversationHandler.END
+        return await routes_menu(update, context)

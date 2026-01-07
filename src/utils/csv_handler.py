@@ -1,5 +1,4 @@
 from typing import Iterable
-from typing import Sequence
 from typing import Any
 import io
 import csv
@@ -21,7 +20,7 @@ class CSVWriter:
             self.write_row(row)
         return self
 
-    def collect(self) -> CSVHandler:
+    def collect(self) -> "CSVHandler":
         return CSVHandler(self.output.getvalue())
 
 
