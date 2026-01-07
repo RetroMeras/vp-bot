@@ -1,3 +1,4 @@
+from services.bus_stop import BusStopService
 from handlers.conversations.buses_utils.constants import BusConfig
 from handlers.conversations.buses_utils.data_manager import UserDataManager
 from handlers.conversations.buses_utils.keyboards import BusKeyboards
@@ -8,6 +9,22 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 user_data_manager = UserDataManager()
 
+async def list_all_stops(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    if not update.callback_query:
+        return ConversationHandler.END
+
+    query = update.callback_query
+    await query.answer()
+
+    bus_stop_service: BusStopService = context.bot_data["bus_stop_service"]
+    stops = bus_stop_service.get_all()
+
+    await query.edit_message_text(
+        "Список всех остановок:\n" +
+        ("\n".join(map(lambda stop: f"{stop.stop_code} | *{stop.name}*", stops))),
+        parse_mode="Markdown"
+    )
+    return ConversationHandler.END
 
 async def prompt_add_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Initial prompt for adding a stop"""

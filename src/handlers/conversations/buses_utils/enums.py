@@ -16,7 +16,7 @@ class BusesConversationSteps(int, Enum):
 class RoutesMenuAnswers(str, Enum):
     CSV_UPLOAD = "routes_upload_csv"
     CSV_EXPORT = "routes_export_csv"
-    VIEW = "routes_view"
+    VIEW_ALL = "routes_view_all"
     ADD = "routes_add"
 
 class BusesMenuAnswers(str, Enum):
@@ -27,7 +27,8 @@ class BusesMenuAnswers(str, Enum):
 
 
 class StopsMenuAnswers(str, Enum):
-    CLOSEST = "closest"
-    ADD = "add"
-    CSV_UPLOAD = "upload_csv"
-    CSV_EXPORT = "export_csv"
+    CLOSEST = "stops_closest"
+    VIEW_ALL = "stops_view_all"
+    ADD = "stops_add"
+    CSV_UPLOAD = "stops_upload_csv"
+    CSV_EXPORT = "stops_export_csv"

@@ -1,3 +1,4 @@
+from handlers.conversations.buses_utils.handlers.add_stops_handlers import list_all_stops
 from handlers.conversations.buses_utils.handlers.csv_handlers import handle_csv_export, prompt_csv_upload
 from handlers.conversations.buses_utils.handlers.add_stops_handlers import prompt_add_stop
 from handlers.conversations.buses_utils.keyboards import BusKeyboards
@@ -24,6 +25,8 @@ async def stops_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if query.data == StopsMenuAnswers.CLOSEST:
         await query.edit_message_text("Отправьте свое местоположение (картой или координаты)")
         return BusesConversationSteps.GET_CLOSEST
+    elif query.data == StopsMenuAnswers.VIEW_ALL:
+        return await list_all_stops(update, context)
     elif query.data == StopsMenuAnswers.ADD:
         return await prompt_add_stop(update, context)
     elif query.data == StopsMenuAnswers.CSV_UPLOAD:

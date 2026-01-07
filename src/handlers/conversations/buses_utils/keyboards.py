@@ -6,28 +6,41 @@ class BusKeyboards:
     @staticmethod
     def main_menu():
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton("Остановки", callback_data=BusesMenuAnswers.STOPS),
-             InlineKeyboardButton("Автобусы", callback_data=BusesMenuAnswers.BUSES)],
-            [InlineKeyboardButton("Расписание", callback_data=BusesMenuAnswers.SCHEDULE),
-             InlineKeyboardButton("Маршруты", callback_data=BusesMenuAnswers.ROUTES)]
+            [
+                InlineKeyboardButton("Остановки", callback_data=BusesMenuAnswers.STOPS),
+                InlineKeyboardButton("Автобусы", callback_data=BusesMenuAnswers.BUSES)
+            ],
+            [
+                InlineKeyboardButton("Расписание", callback_data=BusesMenuAnswers.SCHEDULE),
+                InlineKeyboardButton("Маршруты", callback_data=BusesMenuAnswers.ROUTES)
+            ]
         ])
 
     @staticmethod
     def stops_menu():
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton("Ближайшая", callback_data=StopsMenuAnswers.CLOSEST)],
-            [InlineKeyboardButton("Добавить", callback_data=StopsMenuAnswers.ADD),
-             InlineKeyboardButton("Загрузить", callback_data=StopsMenuAnswers.CSV_UPLOAD),
-             InlineKeyboardButton("Выгрузить", callback_data=StopsMenuAnswers.CSV_EXPORT)]
+            [
+                InlineKeyboardButton("Ближайшая", callback_data=StopsMenuAnswers.CLOSEST),
+                InlineKeyboardButton("Просмотр", callback_data=StopsMenuAnswers.VIEW_ALL),
+            ],
+            [
+                InlineKeyboardButton("Добавить", callback_data=StopsMenuAnswers.ADD),
+                InlineKeyboardButton("Загрузить", callback_data=StopsMenuAnswers.CSV_UPLOAD),
+                InlineKeyboardButton("Выгрузить", callback_data=StopsMenuAnswers.CSV_EXPORT)
+            ]
         ])
 
     @staticmethod
     def routes_menu():
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton("Просмотреть", callback_data=RoutesMenuAnswers.VIEW)],
-            [InlineKeyboardButton("Добавить", callback_data=RoutesMenuAnswers.ADD),
-             InlineKeyboardButton("Загрузить", callback_data=RoutesMenuAnswers.CSV_UPLOAD),
-             InlineKeyboardButton("Выгрузить", callback_data=RoutesMenuAnswers.CSV_EXPORT)]
+            [
+                InlineKeyboardButton("Просмотр", callback_data=RoutesMenuAnswers.VIEW_ALL)
+            ],
+            [
+                InlineKeyboardButton("Добавить", callback_data=RoutesMenuAnswers.ADD),
+                InlineKeyboardButton("Загрузить", callback_data=RoutesMenuAnswers.CSV_UPLOAD),
+                InlineKeyboardButton("Выгрузить", callback_data=RoutesMenuAnswers.CSV_EXPORT)
+            ]
         ])
 
     @staticmethod

@@ -9,6 +9,24 @@ from handlers.conversations.buses_utils.base_handler import BaseHandler
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
+async def list_all_routes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    if not update.callback_query:
+        return ConversationHandler.END
+
+    query = update.callback_query
+    await query.answer()
+
+    bus_route_service: BusRouteService = context.bot_data["bus_route_service"]
+    routes = bus_route_service.get_all()
+
+    await query.edit_message_text(
+        "Список всех маршрутов:\n" +
+        ("\n".join(map(lambda route: f"{route.route_number} | *{route.name}*", routes))),
+        parse_mode="Markdown"
+    )
+    return ConversationHandler.END
+
+
 async def routes_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Show routes menu"""
     await BaseHandler.safe_edit_or_reply(
@@ -33,10 +51,9 @@ async def routes_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
     elif query.data == RoutesMenuAnswers.CSV_EXPORT:
         return await handle_routes_csv_export(update, context)
 
-    elif query.data == RoutesMenuAnswers.VIEW:
+    elif query.data == RoutesMenuAnswers.VIEW_ALL:
         # Handle viewing routes
-        await query.edit_message_text(text="Просмотр маршрутов в разработке")
-        return ConversationHandler.END
+        return await list_all_routes(update, context)
 
     elif query.data == RoutesMenuAnswers.ADD:
         # Handle adding route
