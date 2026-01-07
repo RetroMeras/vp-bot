@@ -91,7 +91,7 @@ async def handle_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             name=row["name"],
             latitude=float(row.get("latitude")) if row.get("latitude") else None,
             longitude=float(row.get("longitude")) if row.get("longitude") else None,
-            is_active=row["is_active"] == "true"
+            is_active=row.get("is_active", "true") == "true"
         )
 
     await processing_msg.edit_text(f"✅ Успешно добавлено {count} остановок")

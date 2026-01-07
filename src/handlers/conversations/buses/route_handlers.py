@@ -141,7 +141,7 @@ async def handle_routes_csv_upload(update: Update, context: ContextTypes.DEFAULT
                 name=route["name"],
                 first_stop_code=route["first_stop_code"],
                 last_stop_code=route["last_stop_code"],
-                is_active=bool(route["is_active"]),
+                is_active=route.get("is_active", "true") == "true",
                 color_hex=route["color_hex"],
             )
             count += success
