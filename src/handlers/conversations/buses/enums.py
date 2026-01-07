@@ -16,6 +16,7 @@ class BusesConversationSteps(int, Enum):
 
 class BusesMenuAnswers(str, Enum):
     STOPS = "bus_stops"
+    ROUTE_STOP = "bus_route_stop"
     BUSES = "buses"
     SCHEDULE = "schedule"
     ROUTES = "routes"

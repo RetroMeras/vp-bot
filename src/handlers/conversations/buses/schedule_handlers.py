@@ -1,6 +1,5 @@
 from services import Services
 from loguru import logger
-from datetime import time
 from utils.base_handler import BaseHandler
 from constants import CSVColumns
 from utils.csv_handler import CSVHandler
@@ -24,7 +23,7 @@ async def list_all_schedules(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     await query.edit_message_text(
         "Список всех расписаний:\n" +
-        ("\n".join(map(lambda s: f"Route {s.route_id} → Stop {s.stop_id} | {s.departure_time} | Days: {s.days_of_week}", schedules[:50]))),
+        ("\n".join(map(lambda s: f"Route {s.route_number} → Stop {s.stop_code} | {s.departure_time} | Days: {s.days_of_week}", schedules[:50]))),
         parse_mode="Markdown"
     )
     return ConversationHandler.END
@@ -93,8 +92,8 @@ async def handle_schedule_csv_export(update: Update, context: ContextTypes.DEFAU
     csv = (CSVHandler
         .new(CSVColumns.BUS_SCHEDULE)
         .write_rows(map(lambda s: {
-            'route_id': s.route_id,
-            'stop_id': s.stop_id,
+            'route_number': s.route_number,
+            'stop_code': s.stop_code,
             'departure_time': s.departure_time.strftime('%H:%M:%S'),
             'days_of_week': s.days_of_week,
             'schedule_type': s.schedule_type,
@@ -140,22 +139,16 @@ async def handle_schedule_csv_upload(update: Update, context: ContextTypes.DEFAU
 
     count = 0
     for row in reader:
-        # Parse time from string
-        time_parts = row["departure_time"].split(':')
-        departure_time = time(
-            hour=int(time_parts[0]),
-            minute=int(time_parts[1]),
-            second=int(time_parts[2]) if len(time_parts) > 2 else 0
-        )
-
-        success, _error = services.bus_schedule.add(
-            route_id=int(row["route_id"]),
-            stop_id=int(row["stop_id"]),
-            departure_time=departure_time,
+        success, reason = services.bus_schedule.add(
+            route_number=int(row["route_number"]),
+            stop_code=row["stop_code"],
+            departure_time=row["departure_time"],
             days_of_week=int(row["days_of_week"]),
             schedule_type=row.get("schedule_type", "REGULAR"),
             notes=row.get("notes", "")
         )
+        if not success:
+            logger.warning(reason)
         count += success
 
     await processing_msg.edit_text(

@@ -86,13 +86,16 @@ async def handle_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     count = 0
     for row in reader:
-        count += services.bus_stop.add(
+        success, reason = services.bus_stop.add(
             stop_code=row["stop_code"],
             name=row["name"],
             latitude=float(row.get("latitude")) if row.get("latitude") else None,
             longitude=float(row.get("longitude")) if row.get("longitude") else None,
             is_active=row.get("is_active", "true") == "true"
         )
+        if not success:
+            logger.warning(reason)
+        count += success
 
     await processing_msg.edit_text(f"✅ Успешно добавлено {count} остановок")
     return ConversationHandler.END

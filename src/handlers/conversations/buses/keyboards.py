@@ -20,7 +20,8 @@ class BusKeyboards:
         return InlineKeyboardMarkup([
             [
                 InlineKeyboardButton("Остановки", callback_data=BusesMenuAnswers.STOPS),
-                InlineKeyboardButton("Автобусы", callback_data=BusesMenuAnswers.BUSES)
+                InlineKeyboardButton("Автобусы", callback_data=BusesMenuAnswers.BUSES),
+                InlineKeyboardButton("Маршрут-Остановка", callback_data=BusesMenuAnswers.ROUTE_STOP)
             ],
             [
                 InlineKeyboardButton("Расписание", callback_data=BusesMenuAnswers.SCHEDULE),
@@ -71,8 +72,8 @@ class BusKeyboards:
         keyboard = [
             [InlineKeyboardButton("Список всех связей", callback_data=RouteStopMenuAnswers.VIEW_ALL)],
             [
-                InlineKeyboardButton("Экспорт CSV", callback_data=RouteStopMenuAnswers.CSV_EXPORT),
-                InlineKeyboardButton("Импорт CSV", callback_data=RouteStopMenuAnswers.CSV_UPLOAD)
+                InlineKeyboardButton("Загрузить", callback_data=RouteStopMenuAnswers.CSV_UPLOAD),
+                InlineKeyboardButton("Выгрузить", callback_data=RouteStopMenuAnswers.CSV_EXPORT),
             ],
             [InlineKeyboardButton("Назад", callback_data=RouteStopMenuAnswers.BACK)]
         ]
@@ -83,8 +84,8 @@ class BusKeyboards:
         keyboard = [
             [InlineKeyboardButton("Список расписаний", callback_data=ScheduleMenuAnswers.VIEW_ALL)],
             [
-                InlineKeyboardButton("Экспорт CSV", callback_data=ScheduleMenuAnswers.CSV_EXPORT),
-                InlineKeyboardButton("Импорт CSV", callback_data=ScheduleMenuAnswers.CSV_UPLOAD)
+                InlineKeyboardButton("Загрузить", callback_data=ScheduleMenuAnswers.CSV_UPLOAD),
+                InlineKeyboardButton("Выгрузить", callback_data=ScheduleMenuAnswers.CSV_EXPORT),
             ],
             [InlineKeyboardButton("Назад", callback_data=ScheduleMenuAnswers.BACK)]
         ]

@@ -20,14 +20,14 @@ class CSVColumns:
         'color_hex'
     ]
     BUS_ROUTE_STOP = [
-        'route_id',
-        'stop_id',
+        'route_number',
+        'stop_code',
         'direction',
         'sequence_number'
     ]
     BUS_SCHEDULE = [
-        'route_id',
-        'stop_id',
+        'route_number',
+        'stop_code',
         'departure_time',
         'days_of_week',
         'schedule_type',

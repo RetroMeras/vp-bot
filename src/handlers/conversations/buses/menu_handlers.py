@@ -1,3 +1,5 @@
+from handlers.conversations.buses.schedule_handlers import schedule_menu
+from handlers.conversations.buses.route_stop_handlers import route_stop_menu
 from utils.base_handler import BaseHandler
 from handlers.conversations.buses.route_handlers import routes_menu
 from handlers.conversations.buses.stops_handlers import stops_menu
@@ -30,8 +32,9 @@ async def buses_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     elif query.data == BusesMenuAnswers.BUSES:
         await query.edit_message_text(text="Автобусы в разработке")
         return ConversationHandler.END
+    elif query.data == BusesMenuAnswers.ROUTE_STOP:
+        return await route_stop_menu(update, context)
     elif query.data == BusesMenuAnswers.SCHEDULE:
-        await query.edit_message_text(text="Расписание в разработке")
-        return ConversationHandler.END
+        return await schedule_menu(update, context)
     elif query.data == BusesMenuAnswers.ROUTES:
         return await routes_menu(update, context)

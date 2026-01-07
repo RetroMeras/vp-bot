@@ -1,6 +1,6 @@
+from services import Services
 from telegram import ReplyKeyboardMarkup
 from loguru import logger
-from services.user import UserService
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -8,8 +8,8 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     if not update.message or not update.effective_user:
         return None
 
-    user_service: UserService = context.bot_data["user_service"]
-    user_service.add_or_update_user(update.effective_user)
+    services: Services = context.bot_data["services"]
+    services.user.add_or_update_user(update.effective_user)
     logger.info(f"Started for user {update.effective_user.username}")
 
     await update.message.reply_text(

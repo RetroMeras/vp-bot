@@ -27,14 +27,14 @@ class BusStopService(BaseService):
     def __init__(self):
         super().__init__()
 
-    def add(self, stop_code: str, name: str, is_active: bool = True, latitude: Optional[float] = None, longitude: Optional[float] = None) -> bool:
+    def add(self, stop_code: str, name: str, is_active: bool = True, latitude: Optional[float] = None, longitude: Optional[float] = None) -> tuple[int, str]:
         if self.session.exec(select(BusStop).where(BusStop.stop_code == stop_code)).first():
-            return False
+            return False, "Остановка с таким кодом уже существует."
 
         stop = BusStop(stop_code=stop_code, name=name, latitude=latitude, longitude=longitude, is_active=is_active)
         self.session.add(stop)
         self.session.commit()
-        return True
+        return True, ""
 
     def get_id(self, id: int) -> BusStop:
         return self.session.exec(select(BusStop).where(BusStop.id == id)).one()

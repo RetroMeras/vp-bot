@@ -23,7 +23,7 @@ async def list_all_route_stops(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await query.edit_message_text(
         "Список всех связей маршрут-остановка:\n" +
-        ("\n".join(map(lambda rs: f"Route {rs.route_id} → Stop {rs.stop_id} | Dir: {rs.direction} | Seq: {rs.sequence_number}", route_stops))),
+        ("\n".join(map(lambda rs: f"Route {rs.route_number} → Stop {rs.stop_code} | Dir: {rs.direction} | Seq: {rs.sequence_number}", route_stops))),
         parse_mode="Markdown"
     )
     return ConversationHandler.END
@@ -92,8 +92,8 @@ async def handle_route_stop_csv_export(update: Update, context: ContextTypes.DEF
     csv = (CSVHandler
         .new(CSVColumns.BUS_ROUTE_STOP)
         .write_rows(map(lambda rs: {
-            'route_id': rs.route_id,
-            'stop_id': rs.stop_id,
+            'route_number': rs.route_number,
+            'stop_code': rs.stop_code,
             'direction': rs.direction,
             'sequence_number': rs.sequence_number
         }, route_stops))
@@ -137,12 +137,14 @@ async def handle_route_stop_csv_upload(update: Update, context: ContextTypes.DEF
 
     count = 0
     for row in reader:
-        success, _reason = services.bus_route_stop.add(
+        success, reason = services.bus_route_stop.add(
             route_number=int(row["route_number"]),
             stop_code=row["stop_code"],
             direction=row.get("direction", "BOTH"),
             sequence_number=int(row["sequence_number"])
         )
+        if not success:
+            logger.warning(reason)
         count += success
 
     await processing_msg.edit_text(

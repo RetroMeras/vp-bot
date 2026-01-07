@@ -10,12 +10,12 @@ class BusRouteStopService(BaseService):
 
     def add(self, route_number: int, stop_code: str, direction: str, sequence_number: int) -> tuple[bool, str]:
         """Add a new bus route stop"""
-        if self.session.exec(select(BusRouteStop).where(
-                BusRouteStop.route_number == route_number and
-                BusRouteStop.stop_code == stop_code and
-                BusRouteStop.sequence_number == sequence_number)
+        if self.session.exec(select(BusRouteStop)
+                .where(BusRouteStop.route_number == route_number)
+                .where(BusRouteStop.stop_code == stop_code)
+                .where(BusRouteStop.sequence_number == sequence_number)
             ).first():
-            return False, "Эта остановка уже была добавлена с таким номером уже существует"
+            return False, "Эта остановка уже была добавлена"
 
         if not self.session.exec(select(BusStop).where(BusStop.stop_code == stop_code)).first():
             return False, f"Не существует остановки с кодом `{stop_code}`"
@@ -37,6 +37,6 @@ class BusRouteStopService(BaseService):
         """Get all routes"""
         return list(self.session.exec(select(BusRouteStop)).all())
 
-    def get_by_id(self, route_id: int) -> Optional[BusRouteStop]:
+    def get_by_id(self, route_number: int) -> Optional[BusRouteStop]:
         """Get route by ID"""
-        return self.session.exec(select(BusRouteStop).where(BusRouteStop.id == route_id)).first()
+        return self.session.exec(select(BusRouteStop).where(BusRouteStop.id == route_number)).first()

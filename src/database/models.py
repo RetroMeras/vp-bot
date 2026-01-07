@@ -1,6 +1,6 @@
 from enum import Enum
 from sqlmodel import SQLModel, Field
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone
 from typing import Optional
 
 class UserRole(str, Enum):
@@ -35,8 +35,8 @@ class BusRoute(SQLModel, table=True):
     id: int = Field(primary_key=True)
     route_number: int = Field(unique=True, nullable=False, index=True)
     name: str
-    first_stop_code: int = Field(foreign_key="busstop.stop_code")
-    last_stop_code: int = Field(foreign_key="busstop.stop_code")
+    first_stop_code: str = Field(foreign_key="busstop.stop_code")
+    last_stop_code: str = Field(foreign_key="busstop.stop_code")
     is_active: bool = True
     color_hex: str = Field(default='#007BFF')
 
@@ -50,8 +50,8 @@ class BusRouteStop(SQLModel, table=True):
 
 class BusSchedule(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    route_id: int = Field(foreign_key="busroute.route_number")
-    stop_id: int = Field(foreign_key="busstop.stop_code")
+    route_number: int = Field(foreign_key="busroute.route_number")
+    stop_code: int = Field(foreign_key="busstop.stop_code")
     departure_time: str # HH:MM 24 hours
     days_of_week: int # TODO change to one byte
     schedule_type: str = Field(default="REGULAR")

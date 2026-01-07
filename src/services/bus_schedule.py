@@ -1,6 +1,5 @@
 """Service for bus schedule operations"""
 from typing import Optional
-from datetime import time
 from sqlmodel import select
 from services.base import BaseService
 from database.models import BusSchedule, BusRoute, BusStop
@@ -12,34 +11,34 @@ class BusScheduleService(BaseService):
 
     def add(
         self,
-        route_id: int,
-        stop_id: int,
-        departure_time: time,
+        route_number: int,
+        stop_code: str,
+        departure_time: str,
         days_of_week: int,
         schedule_type: str = "REGULAR",
         notes: str = ""
     ) -> tuple[bool, str]:
         """Add a new bus schedule"""
         # Check if route exists
-        if not self.session.exec(select(BusRoute).where(BusRoute.id == route_id)).first():
-            return False, f"Не существует маршрута с ID `{route_id}`"
+        if not self.session.exec(select(BusRoute).where(BusRoute.route_number == route_number)).first():
+            return False, f"Не существует маршрута с ID `{route_number}`"
 
         # Check if stop exists
-        if not self.session.exec(select(BusStop).where(BusStop.id == stop_id)).first():
-            return False, f"Не существует остановки с ID `{stop_id}`"
+        if not self.session.exec(select(BusStop).where(BusStop.stop_code == stop_code)).first():
+            return False, f"Не существует остановки с ID `{stop_code}`"
 
         # Check if schedule already exists
-        if self.session.exec(select(BusSchedule).where(
-                BusSchedule.route_id == route_id,
-                BusSchedule.stop_id == stop_id,
-                BusSchedule.departure_time == departure_time,
-                BusSchedule.days_of_week == days_of_week
-            )).first():
+        if self.session.exec(select(BusSchedule)
+                .where(BusSchedule.route_number == route_number)
+                .where(BusSchedule.stop_code == stop_code)
+                .where(BusSchedule.departure_time == departure_time)
+                .where(BusSchedule.days_of_week == days_of_week)
+            ).first():
             return False, "Расписание с такими параметрами уже существует"
 
         schedule = BusSchedule(
-            route_id=route_id,
-            stop_id=stop_id,
+            route_number=route_number,
+            stop_code=stop_code,
             departure_time=departure_time,
             days_of_week=days_of_week,
             schedule_type=schedule_type,
@@ -57,10 +56,10 @@ class BusScheduleService(BaseService):
         """Get schedule by ID"""
         return self.session.exec(select(BusSchedule).where(BusSchedule.id == schedule_id)).first()
 
-    def get_by_route(self, route_id: int) -> list[BusSchedule]:
+    def get_by_route(self, route_number: int) -> list[BusSchedule]:
         """Get all schedules for a specific route"""
         return list(self.session.exec(
             select(BusSchedule)
-            .where(BusSchedule.route_id == route_id)
+            .where(BusSchedule.route_number == route_number)
             .order_by(BusSchedule.departure_time)
         ).all())

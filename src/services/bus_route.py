@@ -40,6 +40,6 @@ class BusRouteService(BaseService):
         """Get route by route number"""
         return self.session.exec(select(BusRoute).where(BusRoute.route_number == route_number)).first()
 
-    def get_by_id(self, route_id: int) -> Optional[BusRoute]:
+    def get_by_id(self, route_number: int) -> Optional[BusRoute]:
         """Get route by ID"""
-        return self.session.exec(select(BusRoute).where(BusRoute.id == route_id)).first()
+        return self.session.exec(select(BusRoute).where(BusRoute.id == route_number)).first()
