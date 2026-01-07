@@ -1,7 +1,8 @@
+from services import Services
+from loguru import logger
 from utils.base_handler import BaseHandler
 from constants import CSVColumns
 from utils.csv_handler import CSVHandler
-from services.bus_route import BusRouteService
 from handlers.conversations.buses.messages import BusMessages
 from handlers.conversations.buses.enums import RoutesMenuAnswers
 from handlers.conversations.buses.enums import BusesConversationSteps
@@ -16,8 +17,8 @@ async def list_all_routes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     await query.answer()
 
-    bus_route_service: BusRouteService = context.bot_data["bus_route_service"]
-    routes = bus_route_service.get_all()
+    services: Services = context.bot_data["services"]
+    routes = services.bus_route.get_all()
 
     await query.edit_message_text(
         "Список всех маршрутов:\n" +
@@ -55,10 +56,9 @@ async def routes_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
         # Handle viewing routes
         return await list_all_routes(update, context)
 
-    elif query.data == RoutesMenuAnswers.ADD:
-        # Handle adding route
-        await query.edit_message_text(text="Добавление маршрута в разработке")
-        return ConversationHandler.END
+    elif query.data == RoutesMenuAnswers.BACK:
+        logger.info("GO back from stops")
+        return BusesConversationSteps.BUSES_MENU
 
 async def prompt_routes_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Prompt user to upload routes CSV"""
@@ -77,9 +77,9 @@ async def handle_routes_csv_export(update: Update, context: ContextTypes.DEFAULT
     await update.callback_query.answer()
     processing_msg = await update.callback_query.edit_message_text("⏳ Подготавливаем CSV файл с маршрутами...")
 
-    bus_route_service: BusRouteService = context.bot_data["bus_route_service"]
+    services: Services = context.bot_data["services"]
 
-    routes = bus_route_service.get_all()
+    routes = services.bus_route.get_all()
 
     if not routes:
         await update.callback_query.edit_message_text("Нет ни одного маршрута.")
@@ -130,13 +130,13 @@ async def handle_routes_csv_upload(update: Update, context: ContextTypes.DEFAULT
 
         processing_msg = await update.message.reply_text("⏳ Обрабатываю CSV файл с маршрутами...")
 
-        bus_route_service: BusRouteService = context.bot_data["bus_route_service"]
+        services: Services = context.bot_data["services"]
         # Download and process
         reader = (await CSVHandler.from_file(await document.get_file())).reader()
 
         count = 0
         for route in reader:
-            success, _reason = bus_route_service.add(
+            success, _reason = services.bus_route.add(
                 route_number=int(route["route_number"]),
                 name=route["name"],
                 first_stop_code=route["first_stop_code"],

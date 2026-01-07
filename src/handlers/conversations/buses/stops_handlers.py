@@ -1,7 +1,8 @@
+from services import Services
+from loguru import logger
 from constants import CSVColumns
 from utils.csv_handler import CSVHandler
 from handlers.conversations.buses.messages import BusMessages
-from services.bus_stop import BusStopService
 from utils.base_handler import BaseHandler
 from handlers.conversations.buses.keyboards import BusKeyboards
 from handlers.conversations.buses.enums import StopsMenuAnswers, BusesConversationSteps
@@ -32,6 +33,9 @@ async def stops_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return await prompt_csv_upload(update, context)
     elif query.data == StopsMenuAnswers.CSV_EXPORT:
         return await handle_csv_export(update, context)
+    elif query.data == StopsMenuAnswers.BACK:
+        logger.info("GO back from stops")
+        return BusesConversationSteps.BUSES_MENU
 
 async def list_all_stops(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     if not update.callback_query:
@@ -40,8 +44,8 @@ async def list_all_stops(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     query = update.callback_query
     await query.answer()
 
-    bus_stop_service: BusStopService = context.bot_data["bus_stop_service"]
-    stops = bus_stop_service.get_all()
+    services: Services = context.bot_data["services"]
+    stops = services.bus_stop.get_all()
 
     await query.edit_message_text(
         "Список всех остановок:\n" +
@@ -77,12 +81,12 @@ async def handle_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     processing_msg = await update.message.reply_text("⏳ Обрабатываю CSV файл...")
 
-    bus_stop_service = context.bot_data["bus_stop_service"]
+    services: Services = context.bot_data["services"]
     reader = (await CSVHandler.from_file(await document.get_file())).reader()
 
     count = 0
     for row in reader:
-        count += bus_stop_service.add(
+        count += services.bus_stop.add(
             stop_code=row["stop_code"],
             name=row["name"],
             latitude=float(row.get("latitude")) if row.get("latitude") else None,
@@ -101,8 +105,8 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     await update.callback_query.answer()
     processing_msg = await update.callback_query.edit_message_text("⏳ Подготавливаем CSV файл...")
 
-    bus_stop_service: BusStopService = context.bot_data["bus_stop_service"]
-    stops = bus_stop_service.get_all()
+    services: Services = context.bot_data["services"]
+    stops = services.bus_stop.get_all()
 
     if not stops:
         await update.callback_query.edit_message_text("Нет ни одной остановки.")
@@ -112,7 +116,6 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     csv_handler = (CSVHandler
         .new(CSVColumns.BUS_STOP)
         .write_rows(map(lambda stop: {
-            'id': stop.id,
             'stop_code': stop.stop_code,
             'name': stop.name,
             'latitude': stop.latitude if stop.latitude else '',
@@ -162,8 +165,8 @@ async def closest_stop_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         return BusesConversationSteps.GET_CLOSEST
 
     # Find closest stop
-    bus_stop_service = context.bot_data["bus_stop_service"]
-    closest = bus_stop_service.get_closest(latitude, longitude)
+    services: Services = context.bot_data["services"]
+    closest = services.bus_stop.get_closest(latitude, longitude)
 
     # Send results
     await update.message.reply_text(

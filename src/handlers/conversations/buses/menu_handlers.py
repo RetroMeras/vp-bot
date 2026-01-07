@@ -17,7 +17,7 @@ async def buses_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         reply_markup=BusKeyboards.main_menu(),
         parse_mode="Markdown"
     )
-    return BusesConversationSteps.BUSES
+    return BusesConversationSteps.BUSES_MENU
 
 async def buses_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int | None:
     query = update.callback_query

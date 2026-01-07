@@ -26,6 +26,9 @@ class BusKeyboards:
             [
                 InlineKeyboardButton("Загрузить", callback_data=StopsMenuAnswers.CSV_UPLOAD),
                 InlineKeyboardButton("Выгрузить", callback_data=StopsMenuAnswers.CSV_EXPORT)
+            ],
+            [
+                InlineKeyboardButton("Назад", callback_data=StopsMenuAnswers.BACK)
             ]
         ])
 
@@ -36,9 +39,11 @@ class BusKeyboards:
                 InlineKeyboardButton("Просмотр", callback_data=RoutesMenuAnswers.VIEW_ALL)
             ],
             [
-                InlineKeyboardButton("Добавить", callback_data=RoutesMenuAnswers.ADD),
                 InlineKeyboardButton("Загрузить", callback_data=RoutesMenuAnswers.CSV_UPLOAD),
                 InlineKeyboardButton("Выгрузить", callback_data=RoutesMenuAnswers.CSV_EXPORT)
+            ],
+            [
+                InlineKeyboardButton("Назад", callback_data=RoutesMenuAnswers.BACK)
             ]
         ])
 
