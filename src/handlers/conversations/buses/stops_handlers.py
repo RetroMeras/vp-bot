@@ -27,14 +27,22 @@ async def stops_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if query.data == StopsMenuAnswers.CLOSEST:
         await query.edit_message_text("Отправьте своё местоположение (картой или координаты)")
         return BusesConversationSteps.GET_CLOSEST
+
     elif query.data == StopsMenuAnswers.VIEW_ALL:
         return await list_all_stops(update, context)
+
     elif query.data == StopsMenuAnswers.CSV_UPLOAD:
         return await prompt_csv_upload(update, context)
+
     elif query.data == StopsMenuAnswers.CSV_EXPORT:
         return await handle_csv_export(update, context)
+
     elif query.data == StopsMenuAnswers.BACK:
-        logger.info("GO back from stops")
+        await query.edit_message_text(
+            "Меню автобусов",
+            reply_markup=BusKeyboards.main_menu(),
+            parse_mode="Markdown"
+        )
         return BusesConversationSteps.BUSES_MENU
 
 async def list_all_stops(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

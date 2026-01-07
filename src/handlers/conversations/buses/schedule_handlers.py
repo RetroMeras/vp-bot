@@ -23,7 +23,7 @@ async def list_all_schedules(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     await query.edit_message_text(
         "Список всех расписаний:\n" +
-        ("\n".join(map(lambda s: f"Route {s.route_number} → Stop {s.stop_code} | {s.departure_time} | Days: {s.days_of_week}", schedules[:50]))),
+        ("\n".join(map(lambda s: f"Марш. {s.route_number} → Остан. {s.stop_code} | {s.departure_time} | Дни: {s.days_of_week}", schedules[:50]))),
         parse_mode="Markdown"
     )
     return ConversationHandler.END
@@ -58,7 +58,11 @@ async def schedule_menu_handler(update: Update, context: ContextTypes.DEFAULT_TY
         return await list_all_schedules(update, context)
 
     elif query.data == ScheduleMenuAnswers.BACK:
-        logger.info("GO back from schedules")
+        await query.edit_message_text(
+            "Меню автобусов",
+            reply_markup=BusKeyboards.main_menu(),
+            parse_mode="Markdown"
+        )
         return BusesConversationSteps.BUSES_MENU
 
 

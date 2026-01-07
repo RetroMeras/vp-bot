@@ -23,7 +23,7 @@ async def list_all_route_stops(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await query.edit_message_text(
         "Список всех связей маршрут-остановка:\n" +
-        ("\n".join(map(lambda rs: f"Route {rs.route_number} → Stop {rs.stop_code} | Dir: {rs.direction} | Seq: {rs.sequence_number}", route_stops))),
+        ("\n".join(map(lambda rs: f"Марш. {rs.route_number} → Остан. {rs.stop_code} | Напр.: {rs.direction} | Очередность: {rs.sequence_number}", route_stops))),
         parse_mode="Markdown"
     )
     return ConversationHandler.END
@@ -58,7 +58,11 @@ async def route_stop_menu_handler(update: Update, context: ContextTypes.DEFAULT_
         return await list_all_route_stops(update, context)
 
     elif query.data == RouteStopMenuAnswers.BACK:
-        logger.info("GO back from route stops")
+        await query.edit_message_text(
+            "Меню автобусов",
+            reply_markup=BusKeyboards.main_menu(),
+            parse_mode="Markdown"
+        )
         return BusesConversationSteps.BUSES_MENU
 
 

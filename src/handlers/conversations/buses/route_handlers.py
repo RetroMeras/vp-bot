@@ -57,7 +57,11 @@ async def routes_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
         return await list_all_routes(update, context)
 
     elif query.data == RoutesMenuAnswers.BACK:
-        logger.info("GO back from stops")
+        await query.edit_message_text(
+            "Меню автобусов",
+            reply_markup=BusKeyboards.main_menu(),
+            parse_mode="Markdown"
+        )
         return BusesConversationSteps.BUSES_MENU
 
 async def prompt_routes_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
