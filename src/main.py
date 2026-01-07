@@ -1,3 +1,4 @@
+from services.bus_route import BusRouteService
 from handlers.conversations.settings import get_settings_conversation_handler
 from handlers.conversations.about import get_about_conversation_handler
 from handlers.conversations.news import get_news_conversation_handler
@@ -24,6 +25,7 @@ if __name__ == "__main__":
     app.bot_data["user_service"] = UserService()
     app.bot_data["admin_service"] = AdminService()
     app.bot_data["bus_stop_service"] = BusStopService()
+    app.bot_data["bus_route_service"] = BusRouteService()
 
 
     app.add_handler(CommandHandler("start", start_handler))

@@ -1,3 +1,4 @@
+from handlers.conversations.buses_utils.enums import RoutesMenuAnswers
 from handlers.conversations.buses_utils.enums import StopsMenuAnswers, BusesMenuAnswers
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 
@@ -18,6 +19,15 @@ class BusKeyboards:
             [InlineKeyboardButton("Добавить", callback_data=StopsMenuAnswers.ADD),
              InlineKeyboardButton("Загрузить", callback_data=StopsMenuAnswers.CSV_UPLOAD),
              InlineKeyboardButton("Выгрузить", callback_data=StopsMenuAnswers.CSV_EXPORT)]
+        ])
+
+    @staticmethod
+    def routes_menu():
+        return InlineKeyboardMarkup([
+            [InlineKeyboardButton("Просмотреть", callback_data=RoutesMenuAnswers.VIEW)],
+            [InlineKeyboardButton("Добавить", callback_data=RoutesMenuAnswers.ADD),
+             InlineKeyboardButton("Загрузить", callback_data=RoutesMenuAnswers.CSV_UPLOAD),
+             InlineKeyboardButton("Выгрузить", callback_data=RoutesMenuAnswers.CSV_EXPORT)]
         ])
 
     @staticmethod

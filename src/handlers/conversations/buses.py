@@ -1,3 +1,6 @@
+from handlers.conversations.buses_utils.handlers.route_handlers import handle_routes_csv_upload
+from handlers.conversations.buses_utils.handlers.route_handlers import routes_menu_handler
+from handlers.conversations.buses_utils.enums import RoutesMenuAnswers
 from handlers.conversations.buses_utils.handlers.csv_handlers import handle_csv_upload
 from handlers.conversations.buses_utils.handlers.location_handlers import closest_stop_handler
 from handlers.conversations.buses_utils.handlers.add_stops_handlers import add_stop_location
@@ -24,6 +27,13 @@ def get_buses_conversation_handler() -> BaseHandler:
             BusesConversationSteps.ADD_STOP_LOCATION: [MessageHandler(filters.TEXT & ~filters.COMMAND | filters.LOCATION, add_stop_location)],
             BusesConversationSteps.GET_CLOSEST: [MessageHandler((filters.TEXT & ~filters.COMMAND) | filters.LOCATION, closest_stop_handler)],
             BusesConversationSteps.CSV_UPLOAD: [MessageHandler(filters.Document.ALL, handle_csv_upload)],
+            BusesConversationSteps.ROUTES: [
+                CallbackQueryHandler(routes_menu_handler,
+                    pattern=f"^({'|'.join([option for option in RoutesMenuAnswers])})$")
+            ],
+            BusesConversationSteps.ROUTES_CSV_UPLOAD: [
+                MessageHandler(filters.Document.ALL, handle_routes_csv_upload)
+            ],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
         allow_reentry=True,

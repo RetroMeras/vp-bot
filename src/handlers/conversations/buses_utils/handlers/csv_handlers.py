@@ -13,7 +13,7 @@ async def prompt_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     """Prompt user to upload CSV"""
     await BaseHandler.safe_edit_or_reply(
         update,
-        text=BusMessages.csv_upload_instructions(),
+        text=BusMessages.bus_stops_upload_instructions(),
         parse_mode='Markdown'
     )
     return BusesConversationSteps.CSV_UPLOAD

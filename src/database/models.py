@@ -33,7 +33,7 @@ class BusStop(SQLModel, table=True):
 
 class BusRoute(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    route_number: str = Field(unique=True, nullable=False, index=True)
+    route_number: int = Field(unique=True, nullable=False, index=True)
     name: str
     first_stop_code: int = Field(foreign_key="busstop.stop_code")
     last_stop_code: int = Field(foreign_key="busstop.stop_code")
