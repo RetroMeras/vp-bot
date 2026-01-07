@@ -1,6 +1,6 @@
-from handlers.conversations.buses_utils.handlers.add_stops_handlers import list_all_stops
-from handlers.conversations.buses_utils.handlers.csv_handlers import handle_csv_export, prompt_csv_upload
-from handlers.conversations.buses_utils.handlers.add_stops_handlers import prompt_add_stop
+from handlers.conversations.buses_utils.add_stops_handlers import list_all_stops
+from handlers.conversations.buses_utils.csv_handlers import handle_csv_export, prompt_csv_upload
+from handlers.conversations.buses_utils.add_stops_handlers import prompt_add_stop
 from handlers.conversations.buses_utils.keyboards import BusKeyboards
 from handlers.conversations.buses_utils.enums import StopsMenuAnswers, BusesConversationSteps
 from handlers.conversations.buses_utils.base_handler import BaseHandler

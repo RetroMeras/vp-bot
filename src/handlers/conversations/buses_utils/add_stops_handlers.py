@@ -1,5 +1,5 @@
+from constants import BusConfig
 from services.bus_stop import BusStopService
-from handlers.conversations.buses_utils.constants import BusConfig
 from handlers.conversations.buses_utils.data_manager import UserDataManager
 from handlers.conversations.buses_utils.keyboards import BusKeyboards
 from handlers.conversations.buses_utils.enums import BusesConversationSteps

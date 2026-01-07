@@ -1,4 +1,4 @@
-from handlers.conversations.buses_utils.constants import BusConfig
+from constants import CSVColumns
 from utils.csv_handler import CSVHandler
 from services.bus_route import BusRouteService
 from handlers.conversations.buses_utils.messages import BusMessages
@@ -87,7 +87,7 @@ async def handle_routes_csv_export(update: Update, context: ContextTypes.DEFAULT
 
     # Generate CSV
     csv = (CSVHandler
-        .new(BusConfig.BUS_ROUTE_COLUMNS)
+        .new(CSVColumns.BUS_ROUTE)
         .write_rows(map(lambda route: {
             'route_number': route.route_number,
             'name': route.name,

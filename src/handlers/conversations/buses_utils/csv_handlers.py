@@ -1,9 +1,9 @@
+from constants import CSVColumns
 from services.bus_stop import BusStopService
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
 from handlers.conversations.buses_utils.base_handler import BaseHandler
-from handlers.conversations.buses_utils.constants import BusConfig
 from handlers.conversations.buses_utils.enums import BusesConversationSteps
 from handlers.conversations.buses_utils.messages import BusMessages
 from utils.csv_handler import CSVHandler
@@ -68,7 +68,7 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     # Generate CSV
     csv_handler = (CSVHandler
-        .new(BusConfig.BUS_STOP_COLUMNS)
+        .new(CSVColumns.BUS_STOP)
         .write_rows(map(lambda stop: {
             'id': stop.id,
             'stop_code': stop.stop_code,
