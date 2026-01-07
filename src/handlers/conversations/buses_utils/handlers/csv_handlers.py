@@ -1,10 +1,13 @@
-from handlers.conversations.buses_utils.enums import BusesConversationSteps
-from handlers.conversations.buses_utils.messages import BusMessages
-from handlers.conversations.buses_utils.base_handler import BaseHandler
-import csv
-import io
+from services.bus_stop import BusStopService
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
+
+from handlers.conversations.buses_utils.base_handler import BaseHandler
+from handlers.conversations.buses_utils.constants import BusConfig
+from handlers.conversations.buses_utils.enums import BusesConversationSteps
+from handlers.conversations.buses_utils.messages import BusMessages
+from utils.csv_handler import CSVHandler
+
 
 async def prompt_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Prompt user to upload CSV"""
@@ -32,13 +35,8 @@ async def handle_csv_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     processing_msg = await update.message.reply_text("⏳ Обрабатываю CSV файл...")
 
-    # Download and process
-    file = await document.get_file()
-    file_bytes = await file.download_as_bytearray()
-    content = file_bytes.decode("utf-8")
-
-    reader = csv.DictReader(io.StringIO(content))
     bus_stop_service = context.bot_data["bus_stop_service"]
+    reader = (await CSVHandler.from_file(await document.get_file())).reader()
 
     count = 0
     for row in reader:
@@ -61,7 +59,7 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     await update.callback_query.answer()
     processing_msg = await update.callback_query.edit_message_text("⏳ Подготавливаем CSV файл...")
 
-    bus_stop_service = context.bot_data["bus_stop_service"]
+    bus_stop_service: BusStopService = context.bot_data["bus_stop_service"]
     stops = bus_stop_service.get_all()
 
     if not stops:
@@ -69,20 +67,16 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         return ConversationHandler.END
 
     # Generate CSV
-    output = io.StringIO()
-    fieldnames = ['id', 'stop_code', 'name', 'latitude', 'longitude', 'is_active']
-    writer = csv.DictWriter(output, fieldnames=fieldnames)
-    writer.writeheader()
-
-    for stop in stops:
-        writer.writerow({
+    csv_handler = (CSVHandler
+        .new(BusConfig.BUS_STOP_COLUMNS)
+        .write_rows(map(lambda stop: {
             'id': stop.id,
             'stop_code': stop.stop_code,
             'name': stop.name,
             'latitude': stop.latitude if stop.latitude else '',
             'longitude': stop.longitude if stop.longitude else '',
             'is_active': stop.is_active
-        })
+        }, stops))).collect()
 
     # Send file
     message = await BaseHandler.get_effective_message(update)
@@ -93,7 +87,7 @@ async def handle_csv_export(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     # type: ignore
     await processing_msg.edit_text("Файл готов! Отправляю...")
     await message.reply_document(
-        document=io.BytesIO(output.getvalue().encode("utf-8")),
+        document=csv_handler.to_file(),
         filename='bus_stops.csv',
         caption='CSV со всеми остановками'
     )

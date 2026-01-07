@@ -35,8 +35,8 @@ class BusRoute(SQLModel, table=True):
     id: int = Field(primary_key=True)
     route_number: str = Field(unique=True, nullable=False, index=True)
     name: str
-    first_stop: int = Field(foreign_key="busstop.id")
-    last_stop: int = Field(foreign_key="busstop.id")
+    first_stop_code: int = Field(foreign_key="busstop.stop_code")
+    last_stop_code: int = Field(foreign_key="busstop.stop_code")
     is_active: bool = True
     color_hex: str = Field(default='#007BFF')
 
