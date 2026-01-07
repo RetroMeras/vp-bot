@@ -1,7 +1,7 @@
 """Service for bus route operations"""
 from database.models import BusStop
 from services.base import BaseService
-from typing import List, Optional
+from typing import Optional
 from sqlmodel import select
 from database.models import BusRoute
 
@@ -32,7 +32,7 @@ class BusRouteService(BaseService):
         self.session.commit()
         return True, ""
 
-    def get_all(self) -> List[BusRoute]:
+    def get_all(self) -> list[BusRoute]:
         """Get all routes"""
         return list(self.session.exec(select(BusRoute)).all())
 

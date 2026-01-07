@@ -25,7 +25,7 @@ async def stops_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await query.answer()
 
     if query.data == StopsMenuAnswers.CLOSEST:
-        await query.edit_message_text("Отправьте свое местоположение (картой или координаты)")
+        await query.edit_message_text("Отправьте своё местоположение (картой или координаты)")
         return BusesConversationSteps.GET_CLOSEST
     elif query.data == StopsMenuAnswers.VIEW_ALL:
         return await list_all_stops(update, context)

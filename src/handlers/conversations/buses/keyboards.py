@@ -1,6 +1,18 @@
-from handlers.conversations.buses.enums import RoutesMenuAnswers
-from handlers.conversations.buses.enums import StopsMenuAnswers, BusesMenuAnswers
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
+
+from handlers.conversations.buses.enums import (
+    BusesMenuAnswers,
+    RoutesMenuAnswers,
+    RouteStopMenuAnswers,
+    ScheduleMenuAnswers,
+    StopsMenuAnswers,
+)
+
 
 class BusKeyboards:
     @staticmethod
@@ -53,3 +65,27 @@ class BusKeyboards:
             [[KeyboardButton("Указать на карте", request_location=True)]],
             resize_keyboard=True, one_time_keyboard=True
         )
+
+    @staticmethod
+    def route_stop_menu() -> InlineKeyboardMarkup:
+        keyboard = [
+            [InlineKeyboardButton("Список всех связей", callback_data=RouteStopMenuAnswers.VIEW_ALL)],
+            [
+                InlineKeyboardButton("Экспорт CSV", callback_data=RouteStopMenuAnswers.CSV_EXPORT),
+                InlineKeyboardButton("Импорт CSV", callback_data=RouteStopMenuAnswers.CSV_UPLOAD)
+            ],
+            [InlineKeyboardButton("Назад", callback_data=RouteStopMenuAnswers.BACK)]
+        ]
+        return InlineKeyboardMarkup(keyboard)
+
+    @staticmethod
+    def schedule_menu() -> InlineKeyboardMarkup:
+        keyboard = [
+            [InlineKeyboardButton("Список расписаний", callback_data=ScheduleMenuAnswers.VIEW_ALL)],
+            [
+                InlineKeyboardButton("Экспорт CSV", callback_data=ScheduleMenuAnswers.CSV_EXPORT),
+                InlineKeyboardButton("Импорт CSV", callback_data=ScheduleMenuAnswers.CSV_UPLOAD)
+            ],
+            [InlineKeyboardButton("Назад", callback_data=ScheduleMenuAnswers.BACK)]
+        ]
+        return InlineKeyboardMarkup(keyboard)

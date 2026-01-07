@@ -43,16 +43,16 @@ class BusRoute(SQLModel, table=True):
 
 class BusRouteStop(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    route_id: int
-    stop_id: int
+    route_number: int = Field(foreign_key="busroute.route_number")
+    stop_code: str = Field(foreign_key="busstop.stop_code")
     direction: str = "BOTH"
     sequence_number: int
 
 class BusSchedule(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    route_id: int = Field(foreign_key="busroute.id")
-    stop_id: int = Field(foreign_key="busstop.id")
-    departure_time: time
+    route_id: int = Field(foreign_key="busroute.route_number")
+    stop_id: int = Field(foreign_key="busstop.stop_code")
+    departure_time: str # HH:MM 24 hours
     days_of_week: int # TODO change to one byte
     schedule_type: str = Field(default="REGULAR")
     notes: str

@@ -7,8 +7,12 @@ class BusesConversationSteps(int, Enum):
     ROUTES = 3
     SCHEDULE = 4
     GET_CLOSEST = 5
-    CSV_UPLOAD = 9
-    ROUTES_CSV_UPLOAD = 10
+    CSV_UPLOAD = 6
+    ROUTES_CSV_UPLOAD = 7
+    ROUTE_STOPS = 8
+    ROUTE_STOP_CSV_UPLOAD = 9
+    SCHEDULES = 10
+    SCHEDULE_CSV_UPLOAD = 11
 
 class BusesMenuAnswers(str, Enum):
     STOPS = "bus_stops"
@@ -28,3 +32,16 @@ class StopsMenuAnswers(str, Enum):
     CSV_UPLOAD = "stops_upload_csv"
     CSV_EXPORT = "stops_export_csv"
     BACK = "back"
+
+
+class RouteStopMenuAnswers(str, Enum):
+    VIEW_ALL = "route_stops_view_all"
+    CSV_UPLOAD = "route_stops_csv_upload"
+    CSV_EXPORT = "route_stops_csv_export"
+    BACK = "route_stops_back"
+
+class ScheduleMenuAnswers(str, Enum):
+    VIEW_ALL = "schedules_view_all"
+    CSV_UPLOAD = "schedules_csv_upload"
+    CSV_EXPORT = "schedules_csv_export"
+    BACK = "schedules_back"

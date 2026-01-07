@@ -1,3 +1,9 @@
+from handlers.conversations.buses.route_stop_handlers import handle_route_stop_csv_upload
+from handlers.conversations.buses.route_stop_handlers import route_stop_menu_handler
+from handlers.conversations.buses.schedule_handlers import handle_schedule_csv_upload
+from handlers.conversations.buses.schedule_handlers import schedule_menu_handler
+from handlers.conversations.buses.enums import ScheduleMenuAnswers
+from handlers.conversations.buses.enums import RouteStopMenuAnswers
 from handlers.conversations.buses.route_handlers import handle_routes_csv_upload, routes_menu_handler
 from handlers.conversations.buses.stops_handlers import handle_csv_upload, closest_stop_handler
 from handlers.conversations.buses.enums import RoutesMenuAnswers
@@ -21,6 +27,18 @@ def get_buses_conversation_handler() -> BaseHandler:
             ],
             BusesConversationSteps.ROUTES_CSV_UPLOAD: [
                 MessageHandler(filters.Document.ALL, handle_routes_csv_upload)
+            ],
+            BusesConversationSteps.ROUTE_STOPS: [
+                CallbackQueryHandler(route_stop_menu_handler, pattern=f"^({'|'.join([option for option in RouteStopMenuAnswers])})$")
+            ],
+            BusesConversationSteps.ROUTE_STOP_CSV_UPLOAD: [
+                MessageHandler(filters.Document.ALL, handle_route_stop_csv_upload)
+            ],
+            BusesConversationSteps.SCHEDULES: [
+                CallbackQueryHandler(schedule_menu_handler, pattern=f"^({'|'.join([option for option in ScheduleMenuAnswers])})$")
+            ],
+            BusesConversationSteps.SCHEDULE_CSV_UPLOAD: [
+                MessageHandler(filters.Document.ALL, handle_schedule_csv_upload)
             ],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
