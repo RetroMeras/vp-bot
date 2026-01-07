@@ -6,12 +6,8 @@ class BusesConversationSteps(int, Enum):
     ROUTES = 3
     SCHEDULE = 4
     GET_CLOSEST = 5
-    ADD_STOP = 6
-    ADD_STOP_NAME = 7
-    ADD_STOP_LOCATION = 8
     CSV_UPLOAD = 9
     ROUTES_CSV_UPLOAD = 10
-    ROUTES_MENU = 11
 
 class RoutesMenuAnswers(str, Enum):
     CSV_UPLOAD = "routes_upload_csv"
@@ -29,6 +25,5 @@ class BusesMenuAnswers(str, Enum):
 class StopsMenuAnswers(str, Enum):
     CLOSEST = "stops_closest"
     VIEW_ALL = "stops_view_all"
-    ADD = "stops_add"
     CSV_UPLOAD = "stops_upload_csv"
     CSV_EXPORT = "stops_export_csv"
