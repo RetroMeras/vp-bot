@@ -33,7 +33,7 @@ class CSVHandler:
         file_bytes = await file.download_as_bytearray()
         content = file_bytes.decode("utf-8")
 
-        return CSVHandler(content)
+        return CSVHandler(content) # ty: ignore[invalid-return-type]
 
     @staticmethod
     def new(fieldnames: list[str]) -> CSVWriter:

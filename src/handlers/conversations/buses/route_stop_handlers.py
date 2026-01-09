@@ -1,3 +1,4 @@
+from telegram import Update
 from services import Services
 from loguru import logger
 from utils.base_handler import BaseHandler
@@ -7,7 +8,6 @@ from handlers.conversations.buses.messages import BusMessages
 from handlers.conversations.buses.enums import RouteStopMenuAnswers
 from handlers.conversations.buses.enums import BusesConversationSteps
 from handlers.conversations.buses.keyboards import BusKeyboards
-from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
 
@@ -108,7 +108,10 @@ async def handle_route_stop_csv_export(update: Update, context: ContextTypes.DEF
     if not message:
         await update.callback_query.edit_message_text("Не удалось отправить файл.")
         return ConversationHandler.END
-    # type: ignore
+
+    if type(processing_msg) is bool:
+        return ConversationHandler.END
+
     await processing_msg.edit_text("Файл готов! Отправляю...")
     await message.reply_document(
         document=csv.to_file(),

@@ -10,8 +10,7 @@ class BaseHandler:
         if update.message:
             return update.message
         elif update.callback_query and update.callback_query.message:
-            # type: ignore
-            return update.callback_query.message
+            return update.callback_query.message # ty: ignore[invalid-return-type]
         return None
 
     @staticmethod

@@ -107,7 +107,10 @@ async def handle_routes_csv_export(update: Update, context: ContextTypes.DEFAULT
     if not message:
         await update.callback_query.edit_message_text("Не удалось отправить файл.")
         return ConversationHandler.END
-    # type: ignore
+
+    if type(processing_msg) is bool:
+        return ConversationHandler.END
+
     await processing_msg.edit_text("Файл готов! Отправляю...")
     await message.reply_document(
         document=csv.to_file(),

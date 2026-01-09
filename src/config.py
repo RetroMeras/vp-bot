@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    telegram_token: str
+    telegram_token: str = ""
     database: str = "sqlite:///./bat.db"
 
     class Config:
